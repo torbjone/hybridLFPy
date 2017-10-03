@@ -180,7 +180,6 @@ neuron_params= {"C_m":        CMem,
                 "t_ref":      2.0,
                 "E_L":        0.0,
                 "V_reset":    0.0,
-                "V_th":       20.0,
                 "V_m":        0.0,
                 "V_th":       theta,
                 "I_e":        dc_amplitude,}

@@ -48,7 +48,7 @@ import neuron # NEURON compiled with MPI must be imported before NEST and mpi4py
 import nest # import not used, but we load NEST anyway in order determine if
             # network is run in parallel
 from hybridLFPy import PostProcess, Population, CachedNetwork, setup_file_dest
-from parameters import ParameterSet
+from NeuroTools.parameters import ParameterSet
 import h5py
 from mpi4py import MPI
 
@@ -149,7 +149,7 @@ PS.update(dict(
             cm = 1.0,
             Ra = 150,
             passive = True,
-            passive_parameters = dict(g_pas=1./(BN.neuron_params['tau_m'] * 1E3), #assyme cm=1
+            passive_parameters = dict(g_pas=1./(BN.neuron_params['tau_m'] * 1E3), #assume cm=1
                                       e_pas=BN.neuron_params['E_L']), 
             nsegs_method = 'lambda_f',
             lambda_f = 100,
@@ -167,7 +167,7 @@ PS.update(dict(
     
     
     #kwargs passed to LFPy.Cell.simulate()
-    simulationParams = dict(),
+    simulationParams = dict(rec_current_dipole_moment=True),
     
     #set up parameters corresponding to cylindrical model populations
     populationParams = dict(
@@ -219,6 +219,8 @@ PS.update(dict(
         'z',
         'LFP',
         'CSD',
+        "current_dipole_moment",
+        "EEG"
     ],
     
     #flag for switching on calculation of CSD
@@ -285,6 +287,27 @@ PS.update(dict(
 PS.update(dict(
     mapping_Yy = list(zip(PS.X, PS.X))
 ))
+
+radii = [79000., 80000., 85000., 90000.]
+rad_tol = 1e-2
+phi_step = 90
+theta = np.linspace(-45, 45, 7)
+theta = theta.flatten()
+
+theta_r = np.deg2rad(theta)
+
+x_eeg = (radii[3] - rad_tol) * np.sin(theta_r)
+y_eeg = np.zeros(x_eeg.shape)
+z_eeg = (radii[3] - rad_tol) * np.cos(theta_r)
+eeg_coords = np.vstack((x_eeg, y_eeg, z_eeg)).T
+
+# Add EEG parameters to parameter set
+PS.update(dict(eeg_dict = dict(
+    radii = radii,
+    sigmas = [0.3, 1.5, 0.015, 0.3],
+    somapos_z = radii[0] - 1500,
+    eeg_coords = eeg_coords,)
+    ))
 
 ################################################################################
 # MAIN simulation procedure                                                    #
@@ -353,6 +376,7 @@ if properrun:
                 synDelayScale = PS.synDelayScale[Y],
                 J_yX = PS.J_yX[Y],
                 tau_yX = PS.tau_yX[Y],
+                eeg_dict = PS.eeg_dict
             )
     
         #run population simulation and collect the data
@@ -387,12 +411,11 @@ if properrun:
     
     #create tar-archive with output for plotting, ssh-ing etc.
     postproc.create_tar_archive()
-    
-    
+
 COMM.Barrier()
 
 #tic toc
-print('Execution time: %.3f seconds' %  (time() - tic))
+print('Execution time: %.3f seconds' % (time() - tic))
 
 
 

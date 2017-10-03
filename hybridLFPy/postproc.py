@@ -134,7 +134,48 @@ class PostProcess(object):
                     f['srate'] = 1E3 / self.dt_output
                     f.create_dataset('data', data=value, compression=4)
                     f.close()
-
+            if 'current_dipole_moment' in self.savelist:
+                #get the per population CDMs and total CDM from all populations:
+                self.CDMdict, self.CDMsum = self.calc_current_dipole_moment()
+                self.CDMdictLayer = self.calc_current_dipole_moment_layer()
+    
+                #save global CDM sum, and from L23E, L4I etc.:
+                f = h5py.File(os.path.join(self.savefolder,
+                                           self.compound_file.format('CDM')
+                                           ), 'w')
+                f['srate'] = 1E3 / self.dt_output
+                f.create_dataset('data', data=self.CDMsum, compression=4)
+                f.close()
+    
+                for key, value in list(self.CDMdictLayer.items()):
+                    f = h5py.File(os.path.join(self.populations_path,
+                                               self.output_file.format(key,
+                                                                       'CDM.h5')
+                                               ), 'w')
+                    f['srate'] = 1E3 / self.dt_output
+                    f.create_dataset('data', data=value, compression=4)
+                    f.close()
+            if 'EEG' in self.savelist:
+                #get the per population EEGs and total EEG from all populations:
+                self.EEGdict, self.EEGsum = self.calc_eeg()
+                self.EEGdictLayer = self.calc_eeg_layer()
+    
+                #save global EEG sum, and from L23E, L4I etc.:
+                f = h5py.File(os.path.join(self.savefolder,
+                                           self.compound_file.format('EEG')
+                                           ), 'w')
+                f['srate'] = 1E3 / self.dt_output
+                f.create_dataset('data', data=self.EEGsum, compression=4)
+                f.close()
+    
+                for key, value in list(self.EEGdictLayer.items()):
+                    f = h5py.File(os.path.join(self.populations_path,
+                                               self.output_file.format(key,
+                                                                       'EEG.h5')
+                                               ), 'w')
+                    f['srate'] = 1E3 / self.dt_output
+                    f.create_dataset('data', data=value, compression=4)
+                    f.close()
             if 'CSD' in self.savelist:
                 #get the per population CSDs and total CSD from all populations:
                 self.CSDdict, self.CSDsum = self.calc_csd()
@@ -204,7 +245,65 @@ class PostProcess(object):
 
             i += 1
 
-        return LFPdict,  LFParray.sum(axis=0)
+        return LFPdict, LFParray.sum(axis=0)
+
+    def calc_eeg(self):
+        """ Sum all the eeg contributions from every cell type.
+        """
+
+        EEGarray = np.array([])
+        EEGdict = {}
+
+        i = 0
+        for y in self.y:
+            fil = os.path.join(self.populations_path,
+                               self.output_file.format(y, 'EEG.h5'))
+
+            f = h5py.File(fil)
+
+            if i == 0:
+                EEGarray = np.zeros((len(self.y),
+                                    f['data'].shape[0], f['data'].shape[1]))
+
+            #fill in
+            EEGarray[i, ] = f['data'].value
+
+            EEGdict.update({y : f['data'].value})
+
+            f.close()
+
+            i += 1
+
+        return EEGdict, EEGarray.sum(axis=0)
+
+    def calc_current_dipole_moment(self):
+        """ Sum all the current dipole moment contributions from every cell type.
+        """
+
+        CDMarray = np.array([])
+        CDMdict = {}
+
+        i = 0
+        for y in self.y:
+            fil = os.path.join(self.populations_path,
+                               self.output_file.format(y, 'CDM.h5'))
+
+            f = h5py.File(fil)
+
+            if i == 0:
+                CDMarray = np.zeros((len(self.y),
+                                    f['data'].shape[0], f['data'].shape[1]))
+
+            #fill in
+            CDMarray[i, ] = f['data'].value
+
+            CDMdict.update({y : f['data'].value})
+
+            f.close()
+
+            i += 1
+
+        return CDMdict, CDMarray.sum(axis=0)
 
 
     def calc_csd(self):
@@ -234,7 +333,7 @@ class PostProcess(object):
 
             i += 1
 
-        return CSDdict,  CSDarray.sum(axis=0)
+        return CSDdict, CSDarray.sum(axis=0)
 
 
     def calc_lfp_layer(self):
@@ -261,6 +360,53 @@ class PostProcess(object):
 
         return LFPdict
 
+    def calc_eeg_layer(self):
+        """
+        Calculate the EEG from concatenated subpopulations residing in a
+        certain layer, e.g all L4E pops are summed, according to the `mapping_Yy`
+        attribute of the `hybridEEGy.Population` objects.
+        """
+        EEGdict = {}
+
+        lastY = None
+        for Y, y in self.mapping_Yy:
+            if lastY != Y:
+                try:
+                    EEGdict.update({Y : self.EEGdict[y]})
+                except KeyError:
+                    pass
+            else:
+                try:
+                    EEGdict[Y] += self.EEGdict[y]
+                except KeyError:
+                    pass
+            lastY = Y
+
+        return EEGdict
+
+    def calc_current_dipole_moment_layer(self):
+        """
+        Calculate the current dipole moment from concatenated subpopulations residing in a
+        certain layer, e.g all L4E pops are summed, according to the `mapping_Yy`
+        attribute of the `hybridLFPy.Population` objects.
+        """
+        CDMdict = {}
+
+        lastY = None
+        for Y, y in self.mapping_Yy:
+            if lastY != Y:
+                try:
+                    CDMdict.update({Y : self.CDMdict[y]})
+                except KeyError:
+                    pass
+            else:
+                try:
+                    CDMdict[Y] += self.CDMdict[y]
+                except KeyError:
+                    pass
+            lastY = Y
+
+        return CDMdict
 
     def calc_csd_layer(self):
         """
@@ -296,7 +442,10 @@ class PostProcess(object):
                                                 'populations', 'subsamples'))
         EXCLUDE_FILES += glob.glob(os.path.join(self.savefolder,
                                                 'raw_nest_output'))
-
+        EXCLUDE_FILES += glob.glob(os.path.join(self.savefolder,
+                                                'CDMs'))
+        EXCLUDE_FILES += glob.glob(os.path.join(self.savefolder,
+                                                'EEGs'))
         def filter_function(tarinfo):
             print(tarinfo.name)
             if len([f for f in EXCLUDE_FILES if os.path.split(tarinfo.name)[-1]

@@ -125,7 +125,8 @@ class PopulationSuper(object):
                  recordSingleContribFrac=0,
                  POPULATIONSEED=123456,
                  verbose=False,
-                 output_file='{}_population_{}'
+                 output_file='{}_population_{}',
+                 eeg_dict=None,
                  ):
 
         """
@@ -201,7 +202,7 @@ class PopulationSuper(object):
         self.dt_output = dt_output
         self.recordSingleContribFrac = recordSingleContribFrac
         self.output_file = output_file
-        
+        self.eeg_dict = eeg_dict
         #check that decimate fraction is actually a whole number
         try:
             assert int(self.dt_output / self.dt) == self.dt_output / self.dt
@@ -760,6 +761,13 @@ class PopulationSuper(object):
         #calculate lfp from all cell contribs
         lfp = self.calc_signal_sum(measure='LFP')
 
+        if 'current_dipole_moment' in self.savelist:
+            current_dipole_moment = self.calc_signal_sum(measure='current_dipole_moment')
+
+        if 'EEG' in self.savelist:
+            EEG = self.calc_signal_sum(measure='EEG')
+
+
         #calculate CSD in every lamina
         if self.calculateCSD:
             csd = self.calc_signal_sum(measure='CSD')
@@ -778,6 +786,31 @@ class PopulationSuper(object):
                 assert(os.path.isfile(fname))
                 print('save lfp ok')
 
+            #saving Current Dipole Moments
+            if 'current_dipole_moment' in self.savelist:
+                fname = os.path.join(self.populations_path,
+                                     self.output_file.format(self.y,
+                                                             'CDM')+'.h5')
+                f = h5py.File(fname, 'w')
+                f['srate'] = 1E3 / self.dt_output
+                f.create_dataset('data', data=current_dipole_moment, compression=4)
+                f.close()
+                del current_dipole_moment
+                assert(os.path.isfile(fname))
+                print('save current dipole moment ok')
+
+            #saving EEGs
+            if 'EEG' in self.savelist:
+                fname = os.path.join(self.populations_path,
+                                     self.output_file.format(self.y,
+                                                             'EEG')+'.h5')
+                f = h5py.File(fname, 'w')
+                f['srate'] = 1E3 / self.dt_output
+                f.create_dataset('data', data=EEG, compression=4)
+                f.close()
+                del EEG
+                assert(os.path.isfile(fname))
+                print('save EEG ok')
 
             #saving CSDs
             if 'CSD' in self.savelist and self.calculateCSD:
@@ -936,7 +969,6 @@ class Population(PopulationSuper):
         CachedNoiseNetwork, LFPy.Cell, LFPy.RecExtElectrode
         """
         tic = time()
-
         PopulationSuper.__init__(self, **kwargs)
         #set some class attributes
         self.X = X
@@ -1307,6 +1339,34 @@ class Population(PopulationSuper):
 
             cell.LFP = helpers.decimate(electrode.LFP,
                                         q=self.decimatefrac)
+
+            if "current_dipole_moment" in self.savelist:
+                cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment.T,
+                                        q=self.decimatefrac)
+                cdm_folder = os.path.join(self.savefolder, "CDMs")
+                if not os.path.isdir(cdm_folder):
+                    os.mkdir(cdm_folder)
+                cellname = "{}_{}".format(self.y, cellindex)
+                np.save(os.path.join(cdm_folder, "{}.npy".format(cellname)),
+                        cell.current_dipole_moment)
+
+            if "EEG" in self.savelist:
+                P = cell.current_dipole_moment
+                r_mid = np.zeros(3)
+                r_mid += cell.somapos[:]
+                r_mid[2] += self.eeg_dict['radii'][0] - 50
+                four_sphere = LFPy.FourSphereVolumeConductor(self.eeg_dict['radii'],
+                                                             self.eeg_dict['sigmas'],
+                                                             self.eeg_dict['eeg_coords'],
+                                                             r_mid)
+                cell.EEG = four_sphere.calc_potential(P.T)*1e3# from mV to uV
+
+                cdm_folder = os.path.join(self.savefolder, "EEGs")
+                if not os.path.isdir(cdm_folder):
+                    os.mkdir(cdm_folder)
+                cellname = "{}_{}".format(self.y, cellindex)
+                np.save(os.path.join(cdm_folder, "{}.npy".format(cellname)),
+                        cell.EEG)
 
 
             cell.x = electrode.x
