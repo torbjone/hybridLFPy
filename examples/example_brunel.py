@@ -301,13 +301,15 @@ y_eeg = np.zeros(x_eeg.shape)
 z_eeg = (radii[3] - rad_tol) * np.cos(theta_r)
 eeg_coords = np.vstack((x_eeg, y_eeg, z_eeg)).T
 
-# Add EEG parameters to parameter set
-PS.update(dict(eeg_dict = dict(
+
+eeg_dict = dict(
     radii = radii,
     sigmas = [0.3, 1.5, 0.015, 0.3],
     somapos_z = radii[0] - 1500,
     eeg_coords = eeg_coords,)
-    ))
+
+# Add EEG parameters to parameter set
+PS.update(dict(eeg_dict))
 
 ################################################################################
 # MAIN simulation procedure                                                    #
