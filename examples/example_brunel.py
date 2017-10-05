@@ -288,6 +288,7 @@ PS.update(dict(
     mapping_Yy = list(zip(PS.X, PS.X))
 ))
 
+#Setting up EEG electrodes and parameters
 radii = [79000., 80000., 85000., 90000.]
 rad_tol = 1e-2
 phi_step = 90

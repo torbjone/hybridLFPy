@@ -84,6 +84,7 @@ from example_microcircuit_params import multicompartment_params, \
 params = multicompartment_params()
 
 
+
 ################################################################################
 # Function declaration(s)
 ################################################################################
@@ -327,6 +328,7 @@ if properrun:
                 J_yX = params.J_yX[y],
                 tau_yX = params.tau_yX[y],
                 recordSingleContribFrac = params.recordSingleContribFrac,
+                eeg_dict = params.eeg_dict,
             )
     
         #run population simulation and collect the data
@@ -506,3 +508,4 @@ if RANK == 0:
                 dpi=300)
     plt.close(fig)
 
+    import plot_EEG

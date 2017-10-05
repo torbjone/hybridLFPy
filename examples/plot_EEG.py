@@ -199,5 +199,5 @@ fig.legend([l_pop, l_dip, l_IN, l_EX],
 
 simplify_axes([ax_cdm, ax_cdm_dec])
 mark_subplots(fig.axes, ypos=1.05)
-fig.savefig(os.path.join(figures_path, 'EEG.pdf'), dpi=300)
+fig.savefig(os.path.join(figures_path, 'EEG_2.pdf'), dpi=300)
 plt.close(fig)
