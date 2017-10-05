@@ -38,8 +38,8 @@ import numpy as np
 if 'DISPLAY' not in os.environ:
     import matplotlib
     matplotlib.use('Agg')
-import matplotlib.style
-matplotlib.style.use('classic')
+# import matplotlib.style
+# matplotlib.style.use('classic')
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from time import time
@@ -310,7 +310,7 @@ eeg_dict = dict(
     eeg_coords = eeg_coords,)
 
 # Add EEG parameters to parameter set
-PS.update(dict(eeg_dict))
+PS.update(dict(eeg_dict=eeg_dict))
 
 ################################################################################
 # MAIN simulation procedure                                                    #

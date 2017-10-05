@@ -49,8 +49,10 @@ def draw_head_to_ax(ax, radii, eeg_coords, eeg_clrs, pop_r_mid):
     ax.add_artist(circle_skalp)
     ax.add_artist(circle_brain)
 
+sim_dict = {"name": ""}
 
 savefolder = 'simulation_output_example_brunel'
+# savefolder = 'simulation_output_example_microcircuit'
 figures_path = os.path.join('simulation_output_example_brunel', 'figures')
 
 pop_r_mid_EX = return_average_somapos(os.path.join(savefolder, "populations",

@@ -211,13 +211,13 @@ class general_params(object):
 
         # folder for all simulation output and scripts
         # here, compute clusters have scratch areas for saving
-        if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
-            self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
-                                           'hybrid_model',
-                                           'simulation_output_example_microcircuit')
+        # if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
+        #     self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
+        #                                    'hybrid_model',
+        #                                    'simulation_output_example_microcircuit')
         # LOCALLY
-        else:
-            self.savefolder = 'simulation_output_example_microcircuit'
+        # else:
+        self.savefolder = 'simulation_output_example_microcircuit'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
