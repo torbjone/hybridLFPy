@@ -316,6 +316,8 @@ PS.update(dict(eeg_dict=eeg_dict))
 # MAIN simulation procedure                                                    #
 ################################################################################
 
+
+
 #tic toc
 tic = time()
 
@@ -696,6 +698,9 @@ if RANK == 0:
     
     fig.savefig(os.path.join(PS.figures_path, 'populations_vII.pdf'), dpi=300)
     plt.close(fig)
+
+    import plot_EEG
+    plot_EEG.plot_EEG(PS)
 
 COMM.Barrier()
 

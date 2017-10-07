@@ -65,6 +65,8 @@ params = multicompartment_params()
 setup_file_dest(params, clearDestination=True)
 
 
+
+
 ###############################################################################
 # MAIN simulation procedure
 ###############################################################################
@@ -136,6 +138,7 @@ for i, y in enumerate(params.y):
             J_yX = params.J_yX[y],
             tau_yX = params.tau_yX[y],
             recordSingleContribFrac = params.recordSingleContribFrac,
+            eeg_dict = params.eeg_dict,
         )
     #run population simulation and collect the data
     pop.run()
@@ -156,6 +159,7 @@ np.random.seed(SIMULATIONSEED)
 postproc = PostProcess(y = params.y,
                        dt_output = params.dt_output,
                        savefolder = params.savefolder,
+                       savelist = params.savelist,
                        mapping_Yy = params.mapping_Yy,
                        )
 

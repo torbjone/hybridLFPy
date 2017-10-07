@@ -135,6 +135,8 @@ class PostProcess(object):
                     f.create_dataset('data', data=value, compression=4)
                     f.close()
             if 'current_dipole_moment' in self.savelist:
+                print("SAVING CDMs")
+
                 #get the per population CDMs and total CDM from all populations:
                 self.CDMdict, self.CDMsum = self.calc_current_dipole_moment()
                 self.CDMdictLayer = self.calc_current_dipole_moment_layer()
@@ -156,6 +158,7 @@ class PostProcess(object):
                     f.create_dataset('data', data=value, compression=4)
                     f.close()
             if 'EEG' in self.savelist:
+                print("SAVING EEGs")
                 #get the per population EEGs and total EEG from all populations:
                 self.EEGdict, self.EEGsum = self.calc_eeg()
                 self.EEGdictLayer = self.calc_eeg_layer()

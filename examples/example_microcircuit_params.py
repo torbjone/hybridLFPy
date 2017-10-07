@@ -461,14 +461,12 @@ class point_neuron_network_params(general_params):
         # offset for RNGs
         self.seed_offset = 45
 
-
         ####################################
         # RECORDING PARAMETERS             #        
         ####################################
 
         self.to_memory = False
-
-        self.overwrite_existing_files = True 
+        self.overwrite_existing_files = True
 
         # recording can either be done from a fraction of neurons in each population or from a fixed number
 
@@ -786,7 +784,7 @@ class multicompartment_params(point_neuron_network_params):
         # SCALING (VOLUME not density)     #
         ####################################  
            
-        self.SCALING = .1
+        self.SCALING = 1.0
         
   
         ####################################

@@ -62,7 +62,7 @@ RANK = COMM.Get_rank()
 
 #if True, execute full model. If False, do only the plotting. Simulation results
 #must exist.
-properrun = True
+properrun = False
 
 
 #check if mod file for synapse model specified in expisyn.mod is loaded
@@ -265,6 +265,7 @@ def sli_run(parameters=object(),
 # MAIN simulation procedure
 ###############################################################################
 
+
 #tic toc
 tic = time()
 
@@ -352,6 +353,7 @@ if properrun:
                            dt_output = params.dt_output,
                            savefolder = params.savefolder,
                            mapping_Yy = params.mapping_Yy,
+                           savelist = params.savelist,
                            )
     
     #run through the procedure
@@ -361,7 +363,7 @@ if properrun:
     postproc.create_tar_archive()
 
 #tic toc
-print('Execution time: %.3f seconds' %  (time() - tic))
+print('Execution time: %.3f seconds' % (time() - tic))
 
 
 ################################################################################
@@ -378,6 +380,8 @@ plt.close('all')
 if RANK == 0:
     #create network raster plot
     x, y = networkSim.get_xy((500, 1000), fraction=1)
+    print x
+    print y
     fig, ax = plt.subplots(1, figsize=(5,8))
     fig.subplots_adjust(left=0.2)
     networkSim.plot_raster(ax, (500, 1000), x, y, markersize=1, marker='o',
@@ -389,7 +393,9 @@ if RANK == 0:
     fig.savefig(os.path.join(params.figures_path, 'network_raster.pdf'),
                 dpi=300)
     plt.close(fig)
-    
+
+    sys.exit()
+
     #plot cell locations
     fig, ax = plt.subplots(1,1, figsize=(5,8))
     fig.subplots_adjust(left=0.2)
@@ -509,3 +515,4 @@ if RANK == 0:
     plt.close(fig)
 
     import plot_EEG
+    plot_EEG.plot_EEG(params)

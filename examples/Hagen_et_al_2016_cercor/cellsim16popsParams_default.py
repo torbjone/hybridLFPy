@@ -1016,6 +1016,8 @@ class multicompartment_params(point_neuron_network_params):
             'morphology',
             'default_rotation',
             'electrodecoeff',
+            'current_dipole_moment',
+            'EEG',
         ]
         
         
@@ -1029,7 +1031,27 @@ class multicompartment_params(point_neuron_network_params):
         #set fraction of neurons from population which LFP output is stored
         self.recordSingleContribFrac = 0.
         
+        #Setting up EEG electrodes and parameters
+        radii = [79000., 80000., 85000., 90000.]
+        rad_tol = 1e-2
+        theta = np.linspace(-45, 45, 7)
+        theta = theta.flatten()
 
+        theta_r = np.deg2rad(theta)
+
+        x_eeg = (radii[3] - rad_tol) * np.sin(theta_r)
+        y_eeg = np.zeros(x_eeg.shape)
+        z_eeg = (radii[3] - rad_tol) * np.cos(theta_r)
+        eeg_coords = np.vstack((x_eeg, y_eeg, z_eeg)).T
+
+        eeg_dict = dict(
+            radii = radii,
+            sigmas = [0.3, 1.5, 0.015, 0.3],
+            somapos_z = radii[0] - 1500,
+            eeg_coords = eeg_coords,)
+
+        # Add EEG parameters to parameter set
+        self.eeg_dict = eeg_dict
 
     def get_GIDs(self):
         GIDs = {}

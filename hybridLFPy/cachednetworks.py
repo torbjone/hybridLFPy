@@ -239,6 +239,7 @@ class CachedNetwork(object):
         """
         x = {}
         y = {}
+        # print self.nodes
 
         for X, nodes in self.nodes.items():
             x[X] = np.array([])
@@ -249,6 +250,8 @@ class CachedNetwork(object):
                 nodes.sort()
 
             spiketimes = self.dbs[X].select_neurons_interval(nodes, T=xlim)
+            print X, spiketimes
+
             i = 0
             for times in spiketimes:
                 x[X] = np.r_[x[X], times]
