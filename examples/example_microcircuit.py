@@ -380,8 +380,6 @@ plt.close('all')
 if RANK == 0:
     #create network raster plot
     x, y = networkSim.get_xy((500, 1000), fraction=1)
-    print x
-    print y
     fig, ax = plt.subplots(1, figsize=(5,8))
     fig.subplots_adjust(left=0.2)
     networkSim.plot_raster(ax, (500, 1000), x, y, markersize=1, marker='o',
@@ -393,8 +391,6 @@ if RANK == 0:
     fig.savefig(os.path.join(params.figures_path, 'network_raster.pdf'),
                 dpi=300)
     plt.close(fig)
-
-    sys.exit()
 
     #plot cell locations
     fig, ax = plt.subplots(1,1, figsize=(5,8))

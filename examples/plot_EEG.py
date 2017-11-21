@@ -71,7 +71,7 @@ def plot_EEG(PS):
                                                        "*_population_somapos.gdf"))
     populations = [pop.split("/")[-1].replace("_population_somapos.gdf", "") for pop in population_files]
 
-    print populations
+    # print populations
 
     if len(populations) == 2:
         pop_clrs = ["r", "b"]
