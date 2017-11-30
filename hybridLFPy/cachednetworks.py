@@ -250,7 +250,6 @@ class CachedNetwork(object):
                 nodes.sort()
 
             spiketimes = self.dbs[X].select_neurons_interval(nodes, T=xlim)
-            print X, spiketimes
 
             i = 0
             for times in spiketimes:
