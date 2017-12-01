@@ -554,7 +554,7 @@ class point_neuron_network_params(general_params):
         ####################################  
        
         # scaling parameter for population sizes
-        self.area = 0.1
+        self.area = 1.0
         
         # preserve indegrees when downscaling
         self.preserve_K = False         
@@ -803,7 +803,7 @@ class multicompartment_params(point_neuron_network_params):
         # SCALING (VOLUME not density)     #
         ####################################  
            
-        self.SCALING = 0.1
+        self.SCALING = 1.0
         
   
         ####################################
