@@ -1,4 +1,3 @@
-
 #!/bin/bash
 ################################################################################
 #SBATCH --job-name cellsim16pops_modified_regular_input

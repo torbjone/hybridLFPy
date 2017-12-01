@@ -216,13 +216,13 @@ class general_params(object):
 
         # folder for all simulation output and scripts
         # HAMBACH and STALLO have scratch areas for saving
-        if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
-            self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
-                                           'hybrid_model',
-                                           'simulation_output_modified_spontan')
+        # if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
+        #     self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
+        #                                    'hybrid_model',
+        #                                    'simulation_output_modified_spontan')
         # LOCALLY
-        else:
-            self.savefolder = 'simulation_output_modified_spontan'
+        # else:
+        self.savefolder = 'simulation_output_modified_spontan'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
@@ -929,8 +929,8 @@ class multicompartment_params(point_neuron_network_params):
         
         
         # additional simulation kwargs, see LFPy.Cell.simulate() docstring
-        self.simulationParams = {}
-        
+        self.simulationParams = {"rec_current_dipole_moment": True}
+
                 
         # a dict setting the number of cells N_y and geometry
         # of cell type population y
