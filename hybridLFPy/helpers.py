@@ -274,7 +274,14 @@ def setup_file_dest(params, clearDestination=True):
         if not os.path.isdir(params.populations_path):
             print('creating %s' % params.populations_path)
             os.mkdir(params.populations_path)
-        
+
+        cdm_folder = os.path.join(params.savefolder, "CDMs")
+        if not os.path.isdir(cdm_folder):
+            os.mkdir(cdm_folder)
+
+        eeg_folder = os.path.join(params.savefolder, "EEGs")
+        if not os.path.isdir(eeg_folder):
+            os.mkdir(eeg_folder)
         try:
             if not os.path.isdir(params.raw_nest_output_path):
                 print('creating %s' % params.raw_nest_output_path)

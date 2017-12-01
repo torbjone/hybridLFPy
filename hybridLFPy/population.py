@@ -1349,8 +1349,7 @@ class Population(PopulationSuper):
                                         q=self.decimatefrac)
 
                 cdm_folder = os.path.join(self.savefolder, "CDMs")
-                if not os.path.isdir(cdm_folder):
-                    os.mkdir(cdm_folder)
+
                 cellname = "{}_{}".format(self.y, cellindex)
                 np.save(os.path.join(cdm_folder, "{}.npy".format(cellname)),
                         cell.current_dipole_moment)
@@ -1369,11 +1368,9 @@ class Population(PopulationSuper):
                     print("NaN in EEG of {} cell {}".format(self.y, cellindex))
                     cell.EEG = np.nan_to_num(cell.EEG)
 
-                cdm_folder = os.path.join(self.savefolder, "EEGs")
-                if not os.path.isdir(cdm_folder):
-                    os.mkdir(cdm_folder)
+                eeg_folder = os.path.join(self.savefolder, "EEGs")
                 cellname = "{}_{}".format(self.y, cellindex)
-                np.save(os.path.join(cdm_folder, "{}.npy".format(cellname)),
+                np.save(os.path.join(eeg_folder, "{}.npy".format(cellname)),
                         cell.EEG)
 
             cell.x = electrode.x
