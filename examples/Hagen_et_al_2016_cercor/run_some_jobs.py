@@ -21,6 +21,7 @@ content = '''#!/bin/bash
 #SBATCH -e {}
 #SBATCH --mem-per-cpu={}
 #SBATCH --ntasks {}
+#SBATCH --mail-type=ALL
 ################################################################################
 unset DISPLAY # slurm appear to create a problem with too many displays
 {} python {}
@@ -48,11 +49,12 @@ if __name__ == '__main__':
     for sim in simscripts:
         job, _ = sim.split('.')
         
-        oe = os.path.join(logdir, job+'.txt')
-        
+        o = os.path.join(logdir, job+'_o.txt')
+        e = os.path.join(logdir, job+'_e.txt')
+
         fname = os.path.join(jobscriptdir, job + '.job')
         f = open(fname, 'w')
-        f.write(content.format(job, stime, oe, oe, memPerCPU, ntasks, mpiexec, sim))
+        f.write(content.format(job, stime, o, e, memPerCPU, ntasks, mpiexec, sim))
         f.close()
         
         jobscripts.append(fname)
