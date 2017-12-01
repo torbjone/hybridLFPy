@@ -216,13 +216,13 @@ class general_params(object):
 
         # folder for all simulation output and scripts
         # HAMBACH and STALLO have scratch areas for saving
-        if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
-            self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
-                                           'hybrid_model',
-                                           'simulation_output_modified_regular_input')
-        # LOCALLY
-        else:
-            self.savefolder = 'simulation_output_modified_regular_input'
+        # if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
+        #     self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
+        #                                    'hybrid_model',
+        #                                    'simulation_output_modified_regular_input')
+        # # LOCALLY
+        # else:
+        self.savefolder = 'simulation_output_modified_regular_input'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
@@ -554,7 +554,7 @@ class point_neuron_network_params(general_params):
         ####################################  
        
         # scaling parameter for population sizes
-        self.area = 1.
+        self.area = 0.1
         
         # preserve indegrees when downscaling
         self.preserve_K = False         
@@ -803,7 +803,7 @@ class multicompartment_params(point_neuron_network_params):
         # SCALING (VOLUME not density)     #
         ####################################  
            
-        self.SCALING = 1.0
+        self.SCALING = 0.1
         
   
         ####################################
