@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib
+matplotlib.use("AGG")
 import matplotlib.style
 matplotlib.style.use('classic')
 import matplotlib.pyplot as plt

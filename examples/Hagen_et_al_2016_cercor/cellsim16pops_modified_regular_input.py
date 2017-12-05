@@ -170,4 +170,4 @@ postproc.run()
 postproc.create_tar_archive()
 
 #tic toc
-print('Execution time: %.3f seconds' %  (time() - tic))
+print('Execution time: %.3f seconds' % (time() - tic))

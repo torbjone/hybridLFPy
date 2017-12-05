@@ -1,11 +1,11 @@
 #!/bin/bash
 ################################################################################
 #SBATCH --job-name cellsim16pops_modified_regular_input
-#SBATCH --time 05:00:00
-#SBATCH -o cellsim16pops_modified_regular_input_o2.txt
-#SBATCH -e cellsim16pops_modified_regular_input_e2.txt
+#SBATCH --time 10:00:00
+#SBATCH -o cellsim16pops_modified_regular_input_o3.txt
+#SBATCH -e cellsim16pops_modified_regular_input_e3.txt
 #SBATCH --mem-per-cpu=2000MB
-#SBATCH --ntasks 400
+#SBATCH --ntasks 80
 #SBATCH --mail-type=ALL
 ################################################################################
 unset DISPLAY # slurm appear to create a problem with too many displays
