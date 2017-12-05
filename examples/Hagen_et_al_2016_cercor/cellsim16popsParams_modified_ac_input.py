@@ -205,7 +205,7 @@ class general_params(object):
         self.tstart = 0
 
         # simulation stop
-        self.tstop = 5200
+        self.tstop = 2200
 
 
         ####################################
