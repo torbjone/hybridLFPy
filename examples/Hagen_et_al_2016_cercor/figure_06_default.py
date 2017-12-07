@@ -8,7 +8,7 @@ matplotlib.style.use('classic')
 import matplotlib.pyplot as plt
 import plotting_helpers as phlp
 from plot_methods import getMeanInpCurrents, getMeanVoltages, plot_population, plot_signal_sum
-from cellsim16popsParams_modified_spontan import multicompartment_params 
+from cellsim16popsParams_default import multicompartment_params
 import analysis_params
 from hybridLFPy import CachedNetwork, helpers
 import pickle as pickle
@@ -425,12 +425,12 @@ if __name__ == '__main__':
         params.networkSimParams['spike_output_path'] = params.spike_output_path
 
         fig = plt.figure()
-        # plot_multi_scale_output_a(fig)
+        plot_multi_scale_output_a(fig)
         plot_multi_scale_output_b(fig)
-        fig.savefig('figure_06.pdf', dpi=300,
+        fig.savefig('figure_06_default.pdf', dpi=300,
                     bbox_inches='tight', pad_inches=0, compression=9)
-        fig.savefig('figure_06.eps',
-                    bbox_inches='tight', pad_inches=0.01)
+        # fig.savefig('figure_06_.eps',
+        #             bbox_inches='tight', pad_inches=0.01)
         
-    plt.show()
+    # plt.show()
 

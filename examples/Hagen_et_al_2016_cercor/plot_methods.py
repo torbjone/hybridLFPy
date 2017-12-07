@@ -581,6 +581,8 @@ def plot_population(ax,
                 #get the somapos
                 somapos = []
                 for j, lname in enumerate(pops):
+                    print(glob.glob(os.path.join(params.populations_path,"*")))
+                    print(params.populations_path)
                     fname = glob.glob(os.path.join(params.populations_path, '%s*somapos.gdf' % lname))[0]
                     if j == 0:
                         somapos = np.loadtxt(fname).reshape((-1, 3))
