@@ -1012,12 +1012,12 @@ class multicompartment_params(point_neuron_network_params):
             'y',
             'z',
             'LFP',
-            'CSD',
+            # 'CSD',
             'morphology',
             'default_rotation',
             'electrodecoeff',
             'current_dipole_moment',
-            'EEG',
+            # 'EEG',
         ]
         
         
