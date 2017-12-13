@@ -787,7 +787,7 @@ class multicompartment_params(point_neuron_network_params):
 
 
         # Switch for current source density computations
-        self.calculateCSD = True
+        self.calculateCSD = False
 
 
     ####################################
