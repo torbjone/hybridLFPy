@@ -4,6 +4,7 @@ from builtins import open, zip
 import os
 import numpy as np
 import matplotlib.style
+matplotlib.use("AGG")
 matplotlib.style.use('classic')
 import matplotlib.pyplot as plt
 import plotting_helpers as phlp

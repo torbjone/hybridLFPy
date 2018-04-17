@@ -21,6 +21,7 @@ content = '''#!/bin/bash
 #SBATCH -e {}
 #SBATCH --mem-per-cpu={}
 #SBATCH --ntasks {}
+#SBATCH --mail-type=ALL
 ################################################################################
 unset DISPLAY # slurm appear to create a problem with too many displays
 {} python {}

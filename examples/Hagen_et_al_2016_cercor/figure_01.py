@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.style
+matplotlib.use("AGG")
 matplotlib.style.use('classic')
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
