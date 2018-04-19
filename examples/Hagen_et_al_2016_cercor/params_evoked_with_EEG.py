@@ -240,6 +240,10 @@ class general_params(object):
         self.raw_nest_output_path = os.path.join(self.savefolder,
                                                  'raw_nest_output')
 
+        # folder for raw nest output files
+        self.cdm_path = os.path.join(self.savefolder, 'cdm')
+
+
         # folder for processed nest output files
         self.spike_output_path = os.path.join(self.savefolder,
                                                        'processed_nest_output')
