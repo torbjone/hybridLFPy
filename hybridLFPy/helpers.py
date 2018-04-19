@@ -258,7 +258,12 @@ def setup_file_dest(params, clearDestination=True):
                         shutil.rmtree(params.savefolder)
                 os.mkdir(params.savefolder)
                 assert(os.path.isdir(params.savefolder))
-        
+
+        if ('current_dipole_moment' in params.savelist and
+            not os.path.isdir(params.cdm_path)):
+            print('creating %s' % params.cdm_path)
+            os.mkdir(params.cdm_path)
+
         if not os.path.isdir(params.sim_scripts_path):
             print('creating %s' % params.sim_scripts_path)
             os.mkdir(params.sim_scripts_path)

@@ -287,6 +287,11 @@ class PopulationSuper(object):
             if not os.path.isdir(self.populations_path):
                 os.mkdir(self.populations_path)
 
+        self.cdm_path = os.path.join(self.savefolder, 'cdm')
+        if RANK == 0:
+            if 'current_dipole_moment' in self.savelist:
+                if not os.path.isdir(self.cdm_path):
+                    os.mkdir(self.cdm_path)
         COMM.Barrier()
 
 
@@ -1328,8 +1333,8 @@ class Population(PopulationSuper):
             if "current_dipole_moment" in self.savelist:
                 cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment,
                                             q=self.decimatefrac)
-                cdp_filename = os.path.join(self.savefolder,
-                                    'cpm_{}_{}.npy'.format(cellindex, self.y))
+                cdp_filename = os.path.join(self.cdm_path,
+                                    'cdm_{}_{}.npy'.format(cellindex, self.y))
                 np.save(cdp_filename, cell.current_dipole_moment)
 
             cell.x = electrode.x

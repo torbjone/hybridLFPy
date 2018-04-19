@@ -239,7 +239,7 @@ class general_params(object):
         # folder for raw nest output files
         self.raw_nest_output_path = os.path.join(self.savefolder,
                                                  'raw_nest_output')
-        
+
         # folder for processed nest output files
         self.spike_output_path = os.path.join(self.savefolder,
                                                        'processed_nest_output')
@@ -929,7 +929,7 @@ class multicompartment_params(point_neuron_network_params):
         
         
         # additional simulation kwargs, see LFPy.Cell.simulate() docstring
-        self.simulationParams = {}
+        self.simulationParams = {'rec_current_dipole_moment': True}
         
                 
         # a dict setting the number of cells N_y and geometry
@@ -1015,7 +1015,7 @@ class multicompartment_params(point_neuron_network_params):
             'CSD',
             'morphology',
             'current_dipole_moment',
-            'EEG',
+            # 'EEG',
             'default_rotation',
             'electrodecoeff',
         ]
