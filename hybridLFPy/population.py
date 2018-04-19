@@ -1331,8 +1331,9 @@ class Population(PopulationSuper):
                                         q=self.decimatefrac)
 
             if "current_dipole_moment" in self.savelist:
-                # cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment,
-                #                             q=self.decimatefrac)
+                cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment.T,
+                                            q=self.decimatefrac)
+                cell.current_dipole_moment = cell.current_dipole_moment.T
                 cdp_filename = os.path.join(self.cdm_path,
                                     'cdm_{}_{}.npy'.format(cellindex, self.y))
                 np.save(cdp_filename, cell.current_dipole_moment)
