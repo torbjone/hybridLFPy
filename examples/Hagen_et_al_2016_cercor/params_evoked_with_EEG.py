@@ -219,10 +219,10 @@ class general_params(object):
         if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
             self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
                                            'hybrid_model',
-                                           'evoked_eeg')
+                                           'evoked_cdm')
         # # LOCALLY
         else:
-            self.savefolder = 'evoked_eeg'
+            self.savefolder = 'evoked_cdm'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
@@ -807,7 +807,7 @@ class multicompartment_params(point_neuron_network_params):
         # SCALING (VOLUME not density)     #
         ####################################  
            
-        self.SCALING = 0.1
+        self.SCALING = 1.0
         
   
         ####################################
@@ -816,7 +816,7 @@ class multicompartment_params(point_neuron_network_params):
 
         # list of morphology files with default location, testing = True
         # will point to simplified morphologies
-        testing = True
+        testing = False
         if testing:
             self.PATH_m_y = os.path.join('morphologies', 'ballnsticks')
             self.m_y = [Y + '_' + y + '.hoc' for Y, y in self.mapping_Yy]
