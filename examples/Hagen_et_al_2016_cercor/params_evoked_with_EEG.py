@@ -216,13 +216,13 @@ class general_params(object):
 
         # folder for all simulation output and scripts
         # HAMBACH and STALLO have scratch areas for saving
-        # if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
-        #     self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
-        #                                    'hybrid_model',
-        #                                    'simulation_output_modified_regular_input')
+        if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
+            self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
+                                           'hybrid_model',
+                                           'evoked_eeg')
         # # LOCALLY
-        # else:
-        self.savefolder = 'evoked_eeg'
+        else:
+            self.savefolder = 'evoked_eeg'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')

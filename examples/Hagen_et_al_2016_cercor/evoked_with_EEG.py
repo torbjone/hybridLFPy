@@ -63,42 +63,42 @@ params = multicompartment_params()
 
 #set up the file destination
 tic = time()
-if 1:
-    setup_file_dest(params, clearDestination=True)
+
+setup_file_dest(params, clearDestination=True)
 
 
-    ###############################################################################
-    # MAIN simulation procedure
-    ###############################################################################
+###############################################################################
+# MAIN simulation procedure
+###############################################################################
 
-    #tic toc
+#tic toc
 
 
-    ######## Perform network simulation ############################################
+######## Perform network simulation ############################################
 
-    ##initiate nest simulation with only the point neuron network parameter class
-    networkParams = point_neuron_network_params()
-    nest_simulation.sli_run(parameters=networkParams,
-                           fname='microcircuit.sli',
-                           verbosity='M_WARNING')
+##initiate nest simulation with only the point neuron network parameter class
+networkParams = point_neuron_network_params()
+nest_simulation.sli_run(parameters=networkParams,
+                       fname='microcircuit.sli',
+                       verbosity='M_WARNING')
 
-    #preprocess the gdf files containing spiking output, voltages, weighted and
-    #spatial input spikes and currents:
-    nest_output_processing.merge_gdf(networkParams,
-                                raw_label=networkParams.spike_detector_label,
-                                file_type='gdf',
-                                fileprefix=params.networkSimParams['label'])
-    nest_output_processing.merge_gdf(networkParams,
-                                raw_label=networkParams.voltmeter_label,
-                                file_type='dat',
-                                fileprefix='voltages')
-    nest_output_processing.merge_gdf(networkParams,
-                                raw_label=networkParams.weighted_input_spikes_label,
-                                file_type='dat',
-                                fileprefix='population_input_spikes')
-    ##spatial input currents
-    #nest_output_processing.create_spatial_input_spikes_hdf5(networkParams,
-    #                                        fileprefix='depth_res_input_spikes-')
+#preprocess the gdf files containing spiking output, voltages, weighted and
+#spatial input spikes and currents:
+nest_output_processing.merge_gdf(networkParams,
+                            raw_label=networkParams.spike_detector_label,
+                            file_type='gdf',
+                            fileprefix=params.networkSimParams['label'])
+nest_output_processing.merge_gdf(networkParams,
+                            raw_label=networkParams.voltmeter_label,
+                            file_type='dat',
+                            fileprefix='voltages')
+nest_output_processing.merge_gdf(networkParams,
+                            raw_label=networkParams.weighted_input_spikes_label,
+                            file_type='dat',
+                            fileprefix='population_input_spikes')
+##spatial input currents
+#nest_output_processing.create_spatial_input_spikes_hdf5(networkParams,
+#                                        fileprefix='depth_res_input_spikes-')
 
 
 #Create an object representation of the simulation output that uses sqlite3
