@@ -183,7 +183,7 @@ class general_params(object):
         # REASON FOR THIS SIMULATION       #
         ####################################
 
-        self.reason = 'Modified Potjans model with thalamic pulses at regular intervals'
+        self.reason = 'EEG calculation from evoked activity'
 
     ####################################
     #                                  #
@@ -205,7 +205,7 @@ class general_params(object):
         self.tstart = 0
 
         # simulation stop
-        self.tstop = 2200
+        self.tstop = 1200
 
 
         ####################################
@@ -222,7 +222,7 @@ class general_params(object):
         #                                    'simulation_output_modified_regular_input')
         # # LOCALLY
         # else:
-        self.savefolder = 'simulation_output_modified_regular_input'
+        self.savefolder = 'evoked_eeg'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
@@ -386,7 +386,7 @@ class general_params(object):
         self.F_yY = [[get_F_y(fname=self.connectivity_table, y=y) for y in Y] for Y in self.y_in_Y]
         
         # Number of neurons of each cell type (N_y); 1-d array
-        self.N_y =  np.array([self.full_scale_num_neurons[layer][pop] * self.F_yY[layer][pop][k] \
+        self.N_y = np.array([self.full_scale_num_neurons[layer][pop] * self.F_yY[layer][pop][k] \
                                      for layer, array in enumerate(self.y_in_Y)\
                                      for pop, cell_types in enumerate(array) \
                                      for k, _ in enumerate(cell_types)]).astype(int)
@@ -803,7 +803,7 @@ class multicompartment_params(point_neuron_network_params):
         # SCALING (VOLUME not density)     #
         ####################################  
            
-        self.SCALING = 1.0
+        self.SCALING = 0.1
         
   
         ####################################
@@ -812,7 +812,7 @@ class multicompartment_params(point_neuron_network_params):
 
         # list of morphology files with default location, testing = True
         # will point to simplified morphologies
-        testing = False
+        testing = True
         if testing:
             self.PATH_m_y = os.path.join('morphologies', 'ballnsticks')
             self.m_y = [Y + '_' + y + '.hoc' for Y, y in self.mapping_Yy]
@@ -1012,8 +1012,10 @@ class multicompartment_params(point_neuron_network_params):
             'y',
             'z',
             'LFP',
-            #'CSD',
+            'CSD',
             'morphology',
+            'current_dipole_moment',
+            'EEG',
             'default_rotation',
             'electrodecoeff',
         ]

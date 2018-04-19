@@ -601,7 +601,7 @@ class PopulationSuper(object):
         Parameters
         ----------
         measure : str
-            {'LFP', 'CSD'}: Either 'LFP' or 'CSD'.
+            {'LFP', 'CSD', 'EEG'}: Either 'LFP', 'CSD', or 'EEG'.
 
 
         Returns
@@ -752,13 +752,16 @@ class PopulationSuper(object):
 
         """
         #collect some measurements resolved per file and save to file
-        for measure in ['LFP', 'CSD']:
+        for measure in ['LFP', 'CSD', 'EEG']:
             if measure in self.savelist:
                 self.collectSingleContribs(measure)
 
 
         #calculate lfp from all cell contribs
         lfp = self.calc_signal_sum(measure='LFP')
+
+        if "EEG" in self.savelist:
+            eeg = self.calc_signal_sum(measure='EEG')
 
         #calculate CSD in every lamina
         if self.calculateCSD:
@@ -777,6 +780,20 @@ class PopulationSuper(object):
                 del lfp
                 assert(os.path.isfile(fname))
                 print('save lfp ok')
+
+            #saving EEGs
+            if 'EEG' in self.savelist:
+                fname = os.path.join(self.populations_path,
+                                     self.output_file.format(self.y,
+                                                             'EEG')+'.h5')
+                f = h5py.File(fname, 'w')
+                f['srate'] = 1E3 / self.dt_output
+                f.create_dataset('data', data=eeg, compression=4)
+                f.close()
+                del eeg
+                assert(os.path.isfile(fname))
+                print('save eeg ok')
+
 
 
             #saving CSDs
@@ -1308,6 +1325,12 @@ class Population(PopulationSuper):
             cell.LFP = helpers.decimate(electrode.LFP,
                                         q=self.decimatefrac)
 
+            if "current_dipole_moment" in self.savelist:
+                cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment,
+                                            q=self.decimatefrac)
+                cdp_filename = os.path.join(self.savefolder,
+                                    'cpm_{}_{}.npy'.format(cellindex, self.y))
+                np.save(cdp_filename, cell.current_dipole_moment)
 
             cell.x = electrode.x
             cell.y = electrode.y
