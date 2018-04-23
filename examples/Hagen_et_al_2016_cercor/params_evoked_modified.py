@@ -183,7 +183,7 @@ class general_params(object):
         # REASON FOR THIS SIMULATION       #
         ####################################
 
-        self.reason = 'EEG calculation from evoked activity'
+        self.reason = 'EEG calculation from modified evoked activity'
 
     ####################################
     #                                  #
@@ -219,10 +219,10 @@ class general_params(object):
         if os.path.isdir(os.path.join('/', 'scratch', os.environ['USER'])):
             self.savefolder = os.path.join('/', 'scratch', os.environ['USER'],
                                            'hybrid_model',
-                                           'evoked_cdm')
+                                           'evoked_modified_cdm')
         # # LOCALLY
         else:
-            self.savefolder = 'evoked_cdm'
+            self.savefolder = 'evoked_modified_cdm'
 
         # folder for simulation scripts
         self.sim_scripts_path = os.path.join(self.savefolder, 'sim_scripts')
@@ -583,8 +583,8 @@ class point_neuron_network_params(general_params):
         self.V_th_std = 0.
         
         self.model_params = { 'tau_m': 10.,        # membrane time constant (ms)
-                              'tau_syn_ex': 0.5,   # excitatory synaptic time constant (ms)
-                              'tau_syn_in': 0.5,   # inhibitory synaptic time constant (ms)
+                              'tau_syn_ex': 2.0,   # excitatory synaptic time constant (ms)
+                              'tau_syn_in': 10.0,   # inhibitory synaptic time constant (ms)
                               't_ref': 2.,         # absolute refractory period (ms)
                               'E_L': -65.,         # resting membrane potential (mV)
                               'V_th': self.V_th_mean, # spike threshold (mV)
@@ -962,7 +962,7 @@ class multicompartment_params(point_neuron_network_params):
 
             self.synParams.update({
                 y : {
-                    'syntype' : 'ExpSynI',  #current based exponential synapse
+                    'syntype' : 'ExpSyn',  #current based exponential synapse
                     'section' : section,
                     # 'tau' : self.model_params["tau_syn_ex"],
                 },

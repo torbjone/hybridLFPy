@@ -34,6 +34,7 @@ scale compute facility is strongly discouraged.
 
 '''
 import os
+import sys
 import numpy as np
 from time import time
 import neuron # NEURON compiled with MPI must be imported before NEST and mpi4py
@@ -43,7 +44,9 @@ import nest_simulation
 from hybridLFPy import PostProcess, Population, CachedNetwork, setup_file_dest
 import nest_output_processing
 
-
+import matplotlib
+matplotlib.use("AGG")
+import matplotlib.pyplot as plt
 #set some seed values
 SEED = 12345678
 SIMULATIONSEED = 12345678
@@ -55,7 +58,7 @@ np.random.seed(SEED)
 ## PARAMETERS
 ################################################################################
 
-from params_evoked_with_EEG import multicompartment_params, \
+from params_evoked_modified import multicompartment_params, \
                                 point_neuron_network_params
 
 #Full set of parameters including network parameters
@@ -103,11 +106,34 @@ nest_output_processing.merge_gdf(networkParams,
 
 #Create an object representation of the simulation output that uses sqlite3
 networkSim = CachedNetwork(**params.networkSimParams)
+#set up figure and subplots
+fig = plt.figure()
 
+fig.subplots_adjust(left=0.05, right=0.95, wspace=0.5, hspace=0.)
 
+#network raster
+ax1 = fig.add_subplot(111, frameon=True)
+T=[875, 950]
+
+x, y = networkSim.get_xy(T, fraction=1.0)
+rasterized = False
+# networkSim.plot_raster(ax1, T, x, y, markersize=0.1, alpha=1.,legend=False, pop_names=True)
+networkSim.plot_raster(ax1, T, x, y, markersize=0.2, marker='_', alpha=1.,
+                       legend=False, pop_names=True, rasterized=rasterized)
+ax1.set_ylabel('')
+ax1.xaxis.set_major_locator(plt.MaxNLocator(4))
+ax1.set_title('spiking activity', va='bottom')
+a = ax1.axis()
+ax1.vlines(x['TC'][0], a[2], a[3], 'k', lw=0.25)
+
+fig.savefig(os.path.join(params.savefolder, 'figure_firing_rates.png'),
+                    bbox_inches='tight', pad_inches=0)
+plt.close("all")
 toc = time() - tic
 print('NEST simulation and gdf file processing done in  %.3f seconds' % toc)
 
+
+sys.exit()
 
 ####### Set up populations #####################################################
 

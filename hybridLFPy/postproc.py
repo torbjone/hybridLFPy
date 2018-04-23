@@ -404,3 +404,23 @@ class PostProcess(object):
         #resync
         COMM.Barrier()
 
+    def create_cdm_tar_archive(self):
+        """ Create a tar archive of the current dipole moments
+        """
+
+        populations = [f for f in os.listdir(os.path.join(self.savefolder, 'cdm'))
+                       if os.path.isdir(os.path.join(self.savefolder, 'cdm', f))]
+
+        for pop_idx, pop in enumerate(populations):
+            if pop_idx % SIZE == RANK:
+
+                print('creating cdm archive %s' % (self.savefolder + '_cdms_{}.tar'.format(pop)))
+                #open file
+                f = tarfile.open(self.savefolder + '_cdms_{}.tar'.format(pop), 'w')
+                f.add(name=os.path.join(self.savefolder, "cdm", pop),
+                      arcname=pop)
+                f.close()
+
+        #resync
+        COMM.Barrier()
+

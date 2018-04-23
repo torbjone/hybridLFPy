@@ -1176,5 +1176,5 @@ def fano(data, units=False):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    
+
 
