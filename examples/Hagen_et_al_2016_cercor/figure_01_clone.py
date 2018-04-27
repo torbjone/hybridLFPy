@@ -140,7 +140,9 @@ def fig_firing_rates(params, ana_params, T=[800, 1000], fraction=0.05, rasterize
 
     x, y = networkSim.get_xy(T, fraction=fraction)
     # networkSim.plot_raster(ax1, T, x, y, markersize=0.1, alpha=1.,legend=False, pop_names=True)
-    networkSim.plot_raster(ax1, T, x, y, markersize=0.2, marker='_', alpha=1.,legend=False, pop_names=True, rasterized=rasterized)
+    networkSim.plot_raster(ax1, T, x, y, markersize=0.2, marker='_',
+                           alpha=1.,legend=False, pop_names=True,
+                           rasterized=rasterized)
     ax1.set_ylabel('')
     ax1.xaxis.set_major_locator(plt.MaxNLocator(4))
     ax1.set_title('spiking activity', va='bottom')

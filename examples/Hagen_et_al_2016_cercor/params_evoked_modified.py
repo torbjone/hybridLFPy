@@ -583,8 +583,8 @@ class point_neuron_network_params(general_params):
         self.V_th_std = 0.
         
         self.model_params = { 'tau_m': 10.,        # membrane time constant (ms)
-                              'tau_syn_ex': 2.0,   # excitatory synaptic time constant (ms)
-                              'tau_syn_in': 10.0,   # inhibitory synaptic time constant (ms)
+                              'tau_syn_ex': 0.5,   # excitatory synaptic time constant (ms)
+                              'tau_syn_in': 0.5,   # inhibitory synaptic time constant (ms)
                               't_ref': 2.,         # absolute refractory period (ms)
                               'E_L': -65.,         # resting membrane potential (mV)
                               'V_th': self.V_th_mean, # spike threshold (mV)
@@ -903,7 +903,7 @@ class multicompartment_params(point_neuron_network_params):
             'cm' : 1.0,
             'Ra' : 150,
             'passive' : True,
-            'passive_parameters' : dict(g_pas=1./(self.model_params['tau_m'] * 1E3), #assume cm=1
+            'passive_parameters' : dict(g_pas=1./(30000),
                                         e_pas=self.model_params['E_L']),
             'nsegs_method' : 'lambda_f',
             'lambda_f' : 100,
@@ -949,6 +949,7 @@ class multicompartment_params(point_neuron_network_params):
                 }
             })
 
+
         # Set up cell type specific synapse parameters in terms of synapse model
         # and synapse locations
         self.synParams = {}
@@ -956,25 +957,29 @@ class multicompartment_params(point_neuron_network_params):
             if y.rfind('p') >= 0:
                 #pyramidal types have apical dendrites
                 section = ['apic', 'dend']
+
             else:
                 #other cell types do not
                 section = ['dend']
 
             self.synParams.update({
                 y : {
-                    'syntype' : 'ExpSyn',  #current based exponential synapse
+                    'syntype' : 'ExpSyn',  #conductance based exponential synapse
                     'section' : section,
-                    # 'tau' : self.model_params["tau_syn_ex"],
+                    #'e': 0 if 'p' in y else -80
                 },
             })
 
+        self.multicomp_syn_params = {}
+        self.multicomp_syn_params["tau_syn_in"] = 4
+        self.multicomp_syn_params["tau_syn_ex"] = 2
         # set up dictionary of synapse time constants specific to each
         # postsynaptic cell type and presynaptic population
         self.tau_yX = {}
         for y in self.y:
             self.tau_yX.update({
-                y : [self.model_params["tau_syn_in"] if 'I' in X else
-                     self.model_params["tau_syn_ex"] for X in self.X]
+                y : [self.multicomp_syn_params["tau_syn_in"] if 'I' in X else
+                     self.multicomp_syn_params["tau_syn_ex"] for X in self.X]
             })
 
         #synaptic delay parameters, loc and scale is mean and std for every
