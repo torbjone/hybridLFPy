@@ -1334,7 +1334,7 @@ class Population(PopulationSuper):
                 cell.current_dipole_moment = helpers.decimate(cell.current_dipole_moment.T,
                                             q=self.decimatefrac)
                 cell.current_dipole_moment = cell.current_dipole_moment.T
-                cdp_filename = os.path.join(self.cdm_path, self.y,
+                cdp_filename = os.path.join(self.cdm_path,
                                     'cdm_{}_{:05d}.npy'.format(self.y, cellindex))
                 np.save(cdp_filename, cell.current_dipole_moment)
 
