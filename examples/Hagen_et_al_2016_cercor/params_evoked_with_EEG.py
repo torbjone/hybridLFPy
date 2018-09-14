@@ -205,7 +205,7 @@ class general_params(object):
         self.tstart = 0
 
         # simulation stop
-        self.tstop = 1200
+        self.tstop = 4200
 
 
         ####################################
@@ -647,7 +647,7 @@ class point_neuron_network_params(general_params):
         ## spike_generator 
         # Note: This can be used with a large Gaussian delay distribution in order to mimic a 
         #       Gaussian pulse packet which is different for each thalamic neuron
-        self.th_spike_times = [899. + i*1000 for i in range(10)]	# time of the thalamic pulses (ms), assume 1 ms delay
+        self.th_spike_times = [499. + i*500 for i in range(10)]	# time of the thalamic pulses (ms), assume 1 ms delay
 
 
         ## sinusoidal_poisson_generator (oscillatory Poisson input)

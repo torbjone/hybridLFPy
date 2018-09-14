@@ -132,6 +132,7 @@ if __name__ == '__main__':
 
     for i, savefolder in enumerate(savefolders):
         # path to simulation files
+
         params.savefolder = os.path.join(os.path.split(params.savefolder)[0],
                                          savefolder)
         params.figures_path = os.path.join(params.savefolder, 'figures')
@@ -144,6 +145,6 @@ if __name__ == '__main__':
         fig.savefig('figure_01.pdf',
                     dpi=450,
                     bbox_inches='tight', pad_inches=0)
-        fig.savefig('figure_01.eps',
-                    bbox_inches='tight', pad_inches=0.01)
+        # fig.savefig('figure_01.eps',
+        #             bbox_inches='tight', pad_inches=0.01)
     plt.show()

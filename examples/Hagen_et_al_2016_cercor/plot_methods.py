@@ -89,12 +89,12 @@ def network_sketch(ax, highlight=None, labels=True, yscaling=1.):
     
     colors = phlp.get_colors(8)[::-1]            ## colors of each population
 
-    fontdict1={'fontsize': 6, ## population name 
+    fontdict1={'fontsize': 3, ## population name
               'weight':'normal',
               'horizontalalignment':'center',
               'verticalalignment':'center'}
 
-    fontdict2={'fontsize': 6, ## cortico-cortical input
+    fontdict2={'fontsize': 4, ## cortico-cortical input
               'weight':'normal',
               'horizontalalignment':'center',
               'verticalalignment':'center'}
@@ -485,30 +485,30 @@ def plot_population(ax,
         if i == 0:
             ax.plot(r*np.cos(theta0),
                     r*np.sin(theta0)*np.sin(isometricangle)+zval,
-                    color='k', zorder=-r, clip_on=False)
+                    color='r', zorder=-r, clip_on=False)
             ax.plot(r*np.cos(theta1),
                     r*np.sin(theta1)*np.sin(isometricangle)+zval,
-                    color='k', zorder=r, clip_on=False)
+                    color='r', zorder=r, clip_on=False)
         else:
             ax.plot(r*np.cos(theta0),
                     r*np.sin(theta0)*np.sin(isometricangle)+zval,
-                    color='gray', zorder=-r, clip_on=False)
+                    color='pink', zorder=-r, clip_on=False)
             ax.plot(r*np.cos(theta1),
                     r*np.sin(theta1)*np.sin(isometricangle)+zval,
-                    color='k', zorder=r, clip_on=False)
+                    color='r', zorder=r, clip_on=False)
     
-    ax.plot([-r, -r], [zpos[0], zpos[-1]], 'k', zorder=0, clip_on=False)
-    ax.plot([r, r], [zpos[0], zpos[-1]], 'k', zorder=0, clip_on=False)
+    ax.plot([-r, -r], [zpos[0], zpos[-1]], 'r', zorder=0, clip_on=False)
+    ax.plot([r, r], [zpos[0], zpos[-1]], 'r', zorder=0, clip_on=False)
     
     if big:
         #plot a horizontal radius scalebar
-        ax.plot([0, r], [z_0.min()]*2, 'k', lw=1, zorder=0, clip_on=False)
-        ax.text(r / 2., z_0.min()-100, '$r$ = %i $\mu$m' % int(r), ha='center')
+        ax.plot([0, r], [z_0.min() - 50]*2, 'k', lw=1, zorder=0, clip_on=False)
+        ax.text(r / 2., z_0.min()-150, '$r$ = %i $\mu$m' % int(r), ha='center')
     
         #plot a vertical depth scalebar
         ax.plot([-r]*2, [z_0.min()+50, z_0.min()-50],
                 'k', lw=1, zorder=0, clip_on=False)
-        ax.text(-r, z_0.min(), r'100 $\mu$m', va='center', ha='right')
+        ax.text(-r - 30, z_0.min(), r'100 $\mu$m', va='center', ha='right')
     
     ax.set_yticks([])
     ax.set_yticklabels([])
@@ -540,9 +540,6 @@ def plot_population(ax,
                                s=3, facecolors=colors[i], edgecolors='gray', linewidths=0.1, zorder=lower,
                                marker = marker, clip_on=False, rasterized=rasterized)
                     
-
-
-
     # DRAW UNITS
     pop = next(zip(*params.mapping_Yy))
     
@@ -832,9 +829,9 @@ def plot_signal_sum(ax, params, fname='LFPsum.h5', unit='mV', scaling_factor=1.,
         yticks.append(z)
      
     if scalebar:
-        ax.plot([tvec[slica][-1], tvec[slica][-1]],
-                [-1300, -1400], lw=2, color='k', clip_on=False)
-        ax.text(tvec[slica][-1]+np.diff(T)*0.02, -1350,
+        ax.plot([tvec[slica][-1] + np.diff(T)*0.04, tvec[slica][-1] + np.diff(T)*0.04],
+                [-900, -1000], lw=2, color='k', clip_on=False)
+        ax.text(tvec[slica][-1]+np.diff(T)*0.08, -950,
                 r'%g %s' % (vlimround, unit),
                 color='k', rotation='vertical',
                 va='center')
@@ -842,7 +839,7 @@ def plot_signal_sum(ax, params, fname='LFPsum.h5', unit='mV', scaling_factor=1.,
     ax.axis(ax.axis('tight'))
     ax.yaxis.set_ticks(yticks)
     if ylabels:
-        ax.yaxis.set_ticklabels(yticklabels)
+        ax.yaxis.set_ticklabels(yticklabels, fontsize=4)
     else:
         ax.yaxis.set_ticklabels([])
 
