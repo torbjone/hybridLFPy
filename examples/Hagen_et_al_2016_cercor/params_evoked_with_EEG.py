@@ -199,7 +199,7 @@ class general_params(object):
         ####################################
 
         # simulation step size
-        self.dt = 0.1
+        self.dt = 2**-3
 
         # simulation start
         self.tstart = 0
@@ -668,7 +668,8 @@ class point_neuron_network_params(general_params):
         ####################################
         # SPATIAL ORGANIZATION             #
         ####################################
-        
+        ####################################
+
         # needed for spatially resolved input currents
         
         # number of layers TODO: find a better solution for that
