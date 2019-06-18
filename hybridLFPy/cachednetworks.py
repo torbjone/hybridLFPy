@@ -314,7 +314,6 @@ class CachedNetwork(object):
         
         ax.axis([xlim[0], xlim[1],
                  self.GIDs[self.X[0]][0], self.GIDs[self.X[0]][0]+N_X_sum])
-        print(self.GIDs[self.X[0]][0], self.GIDs[self.X[0]][0]+N_X_sum)
         ax.set_ylim(ax.get_ylim()[::-1])
         ax.set_ylabel('cell id', labelpad=0)
         ax.set_xlabel('$t$ (ms)', labelpad=0)

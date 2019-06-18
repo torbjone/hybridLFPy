@@ -1,11 +1,12 @@
 import os
 from os.path import join
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import LFPy
 from plotting_convention import simplify_axes
 
-sim_folder = "evoked_cdm"
+sim_folder = "evoked_cdm_2"
 
 populations = [f for f in os.listdir(join(sim_folder, "cdm"))
                if os.path.isdir(join(sim_folder, "cdm", f))]
@@ -23,7 +24,7 @@ plt.close("all")
 fig = plt.figure(figsize=[4, 4])
 fig.subplots_adjust(hspace=0.4, top=0.8, left=0.2, bottom=0.15, right=0.98)
 ax1 = fig.add_subplot(111, xlabel="Time (ms)",
-                      xlim=[875, 950], ylim=[-0.7, 0.7])
+                      xlim=[450, 550], ylim=[-0.7, 0.7])
 ax1.set_ylabel("$\mu$V", labelpad=-3)
 ax1.axvline(900, color='gray', lw=0.2)
 dominating_pops = ["p5(L56)", "p5(L23)",
@@ -44,15 +45,15 @@ pop_clrs = lambda idx: plt.cm.jet(idx / (len(sub_pop_groups_dict.keys()) - 1))
 pop_clrs_list = {pop_name: pop_clrs(pidx) for pidx, pop_name in
                  enumerate(sub_pop_groups_dict.keys())}
 
-
-summed_eeg = np.zeros(1201)
-summed_pop_cdm = np.zeros((1201, 3))
+num_tsteps = 16801
+summed_eeg = np.zeros(num_tsteps)
+summed_pop_cdm = np.zeros((num_tsteps, 3))
 pop_rmid = np.array([0, 0, radii[0] - 1000])
 
 for pop_name, subpops in sub_pop_groups_dict.items():
-    pop_eeg = np.zeros(1201)
+    pop_eeg = np.zeros(num_tsteps)
     for subpop in subpops:
-        summed_cdm = np.zeros((1201, 3))
+        summed_cdm = np.zeros((num_tsteps, 3))
         print(subpop)
         cdm_folder = join(sim_folder, "cdm", "{}".format(subpop))
         files = os.listdir(cdm_folder)
@@ -67,9 +68,13 @@ for pop_name, subpops in sub_pop_groups_dict.items():
             raise RuntimeError("Missmatch!")
 
         for idx, f in enumerate(files):
-            cdm = np.load(join(cdm_folder, f))[:, :]
+            cdm = np.load(join(cdm_folder, f))
+
             r_mid = positions[idx]
             eeg_top = np.array(four_sphere_top.calc_potential(cdm, r_mid)) * 1e3  # from mV to uV
+            if np.isnan(eeg_top).any():
+                print(np.isnan(cdm).any(), pop_name, subpop, idx, f)
+                sys.exit()
             summed_cdm += cdm
             summed_eeg += eeg_top[0, :]
             pop_eeg += eeg_top[0, :]
@@ -80,9 +85,9 @@ for pop_name, subpops in sub_pop_groups_dict.items():
             print("Adding {} to summed cdm".format(subpop))
             summed_pop_cdm[:, 2] += summed_cdm[:, 2]
 
-    # eeg_pop_dipole = np.array(four_sphere_top.calc_potential(summed_cdm,
-    #                  np.average(positions, axis=0))) * 1e3  # from mV to uV
-    # summed_eeg += eeg_pop_dipole[0, :]
+    eeg_pop_dipole = np.array(four_sphere_top.calc_potential(summed_cdm,
+                     np.average(positions, axis=0))) * 1e3  # from mV to uV
+    summed_eeg += eeg_pop_dipole[0, :]
     np.save(join(sim_folder, "EEG_{}.npy".format(pop_name)), pop_eeg)
     ax1.plot(pop_eeg - np.average(pop_eeg),
              c=pop_clrs_list[pop_name], lw=2., label=pop_name)

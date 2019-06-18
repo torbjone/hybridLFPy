@@ -88,13 +88,17 @@ def fig_intro(params, ana_params, fraction=0.05, rasterized=False):
 
 
     # Plot EEG at top of head
-    ax_top_EEG = fig.add_subplot(gs[2, 4], frameon=True, title="EEG at top\nof head", ylim=[-0.8, .3])
+    ax_top_EEG = fig.add_subplot(gs[2, 4], frameon=True, title="EEG at top\nof head", ylim=[-1.5, .5])
     ax_top_EEG.xaxis.set_major_locator(plt.MaxNLocator(4))
 
     ax_top_EEG.set_ylabel("$\mu$V", labelpad=-4)
     summed_top_EEG = np.load(os.path.join(params.savefolder, "summed_EEG.npy"))
+    dt = params.dt
+    tvec = np.arange(len(summed_top_EEG)) * dt
 
-    ax_top_EEG.plot(summed_top_EEG - np.average(summed_top_EEG), lw=0.7, c='b')
+    print(summed_top_EEG, np.average(summed_top_EEG))
+
+    ax_top_EEG.plot(tvec, summed_top_EEG - np.average(summed_top_EEG), lw=0.7, c='b')
     phlp.remove_axis_junk(ax_top_EEG)
 
     #LFP traces in all channels
@@ -121,8 +125,9 @@ def fig_intro(params, ana_params, fraction=0.05, rasterized=False):
             arrowprops=dict(facecolor='black', arrowstyle='simple'),
             )
 
-    for t_idx in np.arange(40, 2200, 2):
+    for t_idx in np.arange(50, 4100, 1):
 
+        print(t_idx)
         T = [t_idx, t_idx + 75]
 
         ax_top_EEG.set_xlim(T)
@@ -130,7 +135,7 @@ def fig_intro(params, ana_params, fraction=0.05, rasterized=False):
         x, y = networkSim.get_xy(T, fraction=fraction)
         # networkSim.plot_raster(ax1, T, x, y, markersize=0.1, alpha=1.,legend=False, pop_names=True)
         networkSim.plot_raster(ax1, T, x, y, markersize=0.2, marker='_',
-                               alpha=1.,legend=False, pop_names=True, rasterized=rasterized)
+                               alpha=1., legend=False, pop_names=True, rasterized=rasterized)
 
         # a = ax1.axis()
         # try:
@@ -166,8 +171,6 @@ def fig_intro(params, ana_params, fraction=0.05, rasterized=False):
                     #pad_inches=0
                     )
 
-
-    
 
 def plot_foursphere_to_ax(ax, params):
 
@@ -230,7 +233,7 @@ if __name__ == '__main__':
     ana_params = analysis_params.params()
 
     
-    savefolders = ['evoked_cdm']
+    savefolders = ['evoked_cdm_2']
 
 
     for i, savefolder in enumerate(savefolders):
